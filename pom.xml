@@ -25,6 +25,7 @@
 
         <quarkus.version>3.15.3</quarkus.version>
         <org.jooq.version>3.20.3</org.jooq.version>
+        <version-set-phase>none</version-set-phase>
     </properties>
 
     <scm>
@@ -91,6 +92,24 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <!-- Prevent version:set without -Pjooq-pro. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.18.0</version>
+                <executions>
+                    <execution>
+                        <id>default-cli</id>
+                        <phase>none</phase>
+                        <configuration>
+                            <!-- Even if they have old version. -->
+                            <processAllModules>true</processAllModules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
     <profiles>
@@ -128,6 +147,11 @@
                     <value>true</value>
                 </property>
             </activation>
+
+            <properties>
+                <version-set-phase>initialize</version-set-phase>
+            </properties>
+
             <build>
                 <plugins>
                     <plugin>
